@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ $# -ne 2 ]]; then
+	echo "Usage: undeploy-vm tenant-name vid"
+	echo "Example: undeploy-vm harpo 1"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+VID=${args[1]}
+
+NET_NAME=$TENANT-vnet-$VID
+
+heat --os-tenant-name $TENANT stack-delete  $NET_NAME

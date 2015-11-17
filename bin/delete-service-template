@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: delete-service-template tenant-name"
+        echo "Example: delete-service-template harpo"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+
+heat --os-tenant-name $TENANT stack-delete $TENANT-service-template

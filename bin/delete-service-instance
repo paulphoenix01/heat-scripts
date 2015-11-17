@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: delete-service-instance tenant-name"
+	echo "Example: delete-service-instance harpo"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+
+heat --os-tenant-name $TENANT stack-delete $TENANT-service-policy
+heat --os-tenant-name $TENANT stack-delete $TENANT-service-instance

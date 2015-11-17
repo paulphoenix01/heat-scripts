@@ -1,0 +1,64 @@
+heat_template_version: 2013-05-23
+
+description: >
+  HOT template to create a service instance combination alarm
+
+parameters:
+  alarm_name:
+    type: string
+    description: Name of the combination alarm 
+  instance_name:
+    type: string
+    description: Name of the service instance
+  meter_name:
+    type: string
+    description: Name of the meter
+  comparison_operator:
+    type: string
+    description: Name of the comparison_operator
+  statistics:
+    type: string
+    description: Name of the statistics to use
+  threshold:
+    type: number
+    description: Alarm threshold
+  period:
+    type: number
+    description: Alarm monitoring period
+  evaluation_periods :
+    type: number
+    description: Number of evaluation_periods
+  alarm_actions_url:
+    type: string
+    description: Alarm actions webhook
+  ok_actions_url:
+    type: string
+    description: OK actions webhook
+  timestamp:
+    type: string
+    description: Timestamp for creation/update
+
+resources:
+  service_alarm:
+    type: OS::OpenLab::ServiceInstanceAlarm
+    properties:
+      name: { get_param: alarm_name }
+      service_instance: { get_param: instance_name }
+      meter_name: { get_param: meter_name }
+      comparison_operator: { get_param: comparison_operator }
+      statistics: { get_param: statistics }
+      threshold: { get_param: threshold }
+      period: { get_param: period }
+      evaluation_periods: { get_param: evaluation_periods }
+      alarm_actions: [{ get_param: alarm_actions_url }]
+      ok_actions: [{ get_param: ok_actions_url }]
+      update_timestamp: { get_param: timestamp }
+
+outputs:
+  combination_alarm_name:
+    description: Combination alarm name
+    value: { get_attr: [ service_alarm, name] }
+  alarm_id_list:
+    description: List of alarm IDS
+    value: { get_attr: [ service_alarm, alarm_ids] }
+

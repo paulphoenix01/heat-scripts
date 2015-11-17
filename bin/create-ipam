@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: create-ipam tenant-name"
+	echo "Example: create-ipam harpo"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+heat --os-tenant-name $TENANT stack-create $TENANT-ipam -f $TMPLT_DIR/ipam.yaml  -P "ipam_name=$TENANT-ipam"

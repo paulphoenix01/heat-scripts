@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ $# -ne 4 ]]; then
+	echo "Usage: create-service-instance tenant-name net1 net2 max_instance"
+	echo "Example: create-service-instance harpo harpo-vnet-1 harpo-vnet-2 2"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+NET_ONE=${args[1]}
+NET_TWO=${args[2]}
+MAX=${args[3]}
+
+heat --os-tenant-name $TENANT stack-create $TENANT-service-instance -f $TMPLT_DIR/service_instance.yaml -P "net_1_name=default-domain:$TENANT:$NET_ONE;net_2_name=default-domain:$TENANT:$NET_TWO;template=default-domain:$TENANT-service-template;instance_name=$TENANT-service-instance;max_instances=$MAX"
+
+sleep 2 
+
+heat --os-tenant-name $TENANT stack-create $TENANT-service-policy -f $TMPLT_DIR/service_policy.yaml -P "policy_name=$TENANT-service-policy;service_instance_name=default-domain:$TENANT:$TENANT-service-instance;net_1_name=$NET_ONE;net_2_name=$NET_TWO"
+
+heat --os-tenant-name $TENANT stack-delete $TENANT-policy

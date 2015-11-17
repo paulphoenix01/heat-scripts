@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: delete-project tenant-name"
+	echo "Example: delete-project harpo"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+heat  --os-tenant-name admin stack-delete $TENANT
+

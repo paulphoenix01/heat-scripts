@@ -1,0 +1,57 @@
+heat_template_version: 2013-05-23
+
+description: >
+  HOT template to create a service instance
+
+parameters:
+  net_1_name:
+    type: string
+    description: Name of private network to be created
+  net_2_name:
+    type: string
+    description: Name of private network to be created
+  template:
+    type: string
+    description: service template name or ID
+  instance_name:
+    type: string
+    description: service instance name
+  availability_zone:
+    type: string
+    description: availability zone in form of Zone:Host
+    default: ""
+  max_instances:
+    type: number
+    description: maximum number of instances to be spawned
+
+resources:
+  service_instance:
+    type: OS::Contrail::ServiceInstance
+    properties:
+      name: { get_param: instance_name }
+      service_template: { get_param:  template}
+      availability_zone: { get_param: availability_zone}
+      scale_out: 
+          max_instances: { get_param: max_instances }
+      interface_list: [
+          {
+              virtual_network: "auto"
+          },
+          {
+              virtual_network: {get_param: net_1_name}
+          },
+          {
+              virtual_network: {get_param: net_2_name}
+          },
+      ]
+
+outputs:
+  service_instance_fq_name:
+    description: FQ name of the service template
+    value: { get_attr: [ service_instance, fq_name] }
+  service_instance_vms:
+    description: List of service VMs
+    value: { get_attr: [ service_instance, virtual_machines] }
+  num_active_service_instance_vms:
+    description: Number of active service VMs
+    value: { get_attr: [ service_instance, active_service_vms] }

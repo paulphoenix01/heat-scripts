@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: create-project tenant-name"
+	echo "Example: create-project harpo"
+        exit 1
+fi
+
+args=("$@")
+TENANT=${args[0]}
+heat --os-tenant-name admin stack-create $TENANT -f $TMPLT_DIR/create_project.yaml -P "tenant=$TENANT;description=$TENANT-in-the-cloud"
+

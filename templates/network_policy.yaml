@@ -1,0 +1,78 @@
+heat_template_version: 2013-05-23
+
+description: >
+  HOT template to create t policy between two virtual network.
+  Creates a network policy for applying service between two VNs created before.
+  Attach the network policy to two virtual networks
+
+parameters:
+  policy_name:
+    type: string
+    description: Virtual network id
+  direction:
+    type: string
+    description: Direction of Policy
+    default: <>
+  start_src_ports:
+    type: number
+    description: Start of src port
+    default: -1
+  end_src_ports:
+    type: number
+    description: End of src port
+    default: -1
+  start_dst_ports:
+    type: number
+    description: Start of dst port
+    default: -1
+  end_dst_ports:
+    type: number
+    description: End of dst port
+    default: -1
+  action:
+    type: string
+    description: service to apply
+    default: pass
+  net_1_name:
+    type: string
+    description: Name of network to be created
+  net_2_name:
+    type: string
+    description: Name of network to be created
+  net_protocol:
+    type: string
+    description: Name of service instance
+    default: any
+
+resources:
+
+  net_policy:
+    type: OS::Contrail::NetworkPolicy
+    properties:
+      name: { get_param: policy_name }
+      entries:
+        policy_rule: [
+              { 
+                "direction": { get_param: direction }, 
+                "protocol": { get_param: net_protocol },
+                "src_ports": [{"start_port": {get_param: start_src_ports}, "end_port": {get_param: end_src_ports}}],
+                "dst_ports": [{"start_port": {get_param: start_dst_ports}, "end_port": {get_param: end_dst_ports}}],
+                "dst_addresses": [{ "virtual_network": {get_param: net_1_name}}], 
+                "action_list": {"simple_action": {get_param: action}}, 
+                "src_addresses": [{ "virtual_network": {get_param: net_2_name}}] 
+              }, 
+        ]
+  policy_attach_net1:
+    type: OS::Contrail::AttachPolicy
+    depends_on: net_policy
+    properties:
+      network: { get_param: net_1_name }
+      policy: { get_attr: [net_policy, fq_name] }
+
+  policy_attach_net2:
+    type: OS::Contrail::AttachPolicy
+    depends_on: policy_attach_net1
+    properties:
+      network: { get_param: net_2_name }
+      policy: { get_attr: [net_policy, fq_name] }
+
