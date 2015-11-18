@@ -49,12 +49,12 @@ def create_alarm():
     alarm_stack = heatclient.stacks.get(alarm_stack_name)
 
     if( (request.json['current'] == 'alarm') and  (request.json['previous'] == 'ok') ):
-        subprocess.call([os.environ['TMPLT_DIR']+'/update-service-instance', project_name, net_one, net_two, str(max_instances+1)])
+        subprocess.call([os.environ['ROOT_DIR']+'/bin/update-service-instance', project_name, net_one, net_two, str(max_instances+1)])
 
         print request.json['current'], request.json['previous'], request.json['alarm_id'], 'alarm raised: scale-out '+ str(max_instances) + '->' + str(max_instances+1) + ' instances'
         return jsonify({'task': u'Ceilometer alarm raised - scale-out 2 -> 3 instances'}), 201
     elif( (request.json['current'] == 'ok') and  (request.json['previous'] == 'alarm') ):
-        subprocess.call([os.environ['TMPLT_DIR']+'/update-service-instance', project_name, net_one, net_two, str(max_instances-1)])
+        subprocess.call([os.environ['ROOT_DIR']+'/bin/update-service-instance', project_name, net_one, net_two, str(max_instances-1)])
 
         print request.json['current'], request.json['previous'], request.json['alarm_id'], 'alarm cleared: scale-in ' + str(max_instances) + '->' + str(max_instances-1) + ' instances'
         return jsonify({'task': u'Ceilometer alarm cleared - scale-in 3 -> 2 instances'}), 201
