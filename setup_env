@@ -10,3 +10,4 @@ export OS_NO_CACHE=1
 
 export TMPLT_DIR=$PWD/templates
 export PATH=$PATH:$PWD/bin
+export PORTAL_PORT=8197

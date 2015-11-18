@@ -63,5 +63,5 @@ def create_alarm():
     return jsonify({'task': u'Ceilometer alarm event received'}), 201
 
 if __name__ == '__main__':
-    app.run(host="controller", port=8197, debug=True)
+    app.run(host="controller", port=int(os.environ['PORTAL_PORT']), debug=True)
 
