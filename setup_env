@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-args=("$@")
 export OS_USERNAMEadmin
 export OS_PASSWORD=contrail123
 export OS_TENANT_NAME=$USER
