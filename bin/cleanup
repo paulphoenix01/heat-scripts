@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: cleanup tenant-name"
+	echo "Example: cleanup harpo"
+        exit 1
+fi
+
+delete-service-alarm $1
+delete-service-policy $1
+delete-service-instance $1
+delete-service-template $1
+undeploy-vm $1 1
+undeploy-vm $1 2
+delete-ipam $1
+delete-project $1 
