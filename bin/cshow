@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+	echo "Usage: cshow alarm-id"
+	echo "Example: cshow 6514cd93-478e-4078-9bce-bb6ed9e653fd"
+        exit 1
+fi
+
+ceilometer alarm-show -a $1
+

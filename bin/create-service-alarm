@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $# -ne 9 ]]; then
-	echo "Usage: create-service-alarm tenant-name meter comp_op stat threshold period eval_periods alarm_webhook ok_webhook"
-	echo "Example: create-service-alarm harpo cpu_util gt avg 20 60 1 http://controller:8197/alarms/api http://controller:8197/alarms/api"
+if [[ $# -ne 7 ]]; then
+	echo "Usage: create-service-alarm tenant-name meter comp_op stat threshold period eval_periods"
+	echo "Example: create-service-alarm harpo cpu_util gt avg 20 60 1"
         exit 1
 fi
 
@@ -14,8 +14,8 @@ STAT=${args[3]}
 THRESHOLD=${args[4]}
 PERIOD=${args[5]}
 EVAL_PERIODS=${args[6]}
-ALARM_URL=${args[7]}
-OK_URL=${args[8]}
+ALARM_URL=http://controller:$PORTAL_PORT/alarms/api
+OK_URL=http://controller:$PORTAL_PORT/alarms/api
 TIMESTAMP=$(date +%d-%b-%H_%M_%S)
 
 heat --os-tenant-name $TENANT stack-create $TENANT-service-alarm -f $TMPLT_DIR/service_alarm.yaml -P "alarm_name=$TENANT-service-alarm;instance_name=default-domain:$TENANT:$TENANT-service-instance;meter_name=$METER_NAME;comparison_operator=$COMP_OP;statistics=$STAT;threshold=$THRESHOLD;period=$PERIOD;evaluation_periods=$EVAL_PERIODS;alarm_actions_url=$ALARM_URL;ok_actions_url=$OK_URL;timestamp=$TIMESTAMP"
