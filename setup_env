@@ -8,7 +8,6 @@ fi
 
 export OS_USERNAME=admin
 export OS_PASSWORD=contrail123
-#export OS_TENANT_NAME=$USER
 export OS_TENANT_NAME=$1
 export OS_AUTH_URL=http://controller:5000/v2.0/
 export OS_NO_CACHE=1
