@@ -8,16 +8,16 @@ import jinja2
 from heatclient.client import Client as Heat_Client
 from keystoneclient.v2_0 import Client as Keystone_Client
 
-def get_keystone_creds(config_node_ip):
+def get_keystone_creds(config_node_ip, tenant_name):
     d = {}
     d['username'] = 'admin'
     d['password'] = 'contrail123'
     d['auth_url'] = 'http://' + config_node_ip + ':5000/v2.0'
-    d['tenant_name'] = 'admin'
+    d['tenant_name'] = tenant_name
     return d
 
-def create_stack(config_node_ip, project_name, **kwargs):
-    cred = get_keystone_creds(config_node_ip)
+def create_stack(config_node_ip, tenant_name, **kwargs):
+    cred = get_keystone_creds(config_node_ip, tenant_name)
     ks_client = Keystone_Client(**cred)
     heat_endpoint = ks_client.service_catalog.url_for(service_type='orchestration', endpoint_type='publicURL')
     heatclient = Heat_Client('1', heat_endpoint, token=ks_client.auth_token)
