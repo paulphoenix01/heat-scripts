@@ -24,8 +24,8 @@ StackData = {   'stack_name': project_name + '-service-alarm',
                                     'threshold': 20,
                                     'period': 60,
                                     'evaluation_periods': 1,
-                                    'alarm_actions_url': 'http://controller:$PORTAL_PORT/alarms/api',
-                                    'ok_actions_url': 'http://controller:$PORTAL_PORT/alarms/api',
+                                    'alarm_actions_url': 'http://controller:8197/alarms/api',
+                                    'ok_actions_url': 'http://controller:8197/alarms/api',
                                     'timestamp': timestamp
                                     }
             }
