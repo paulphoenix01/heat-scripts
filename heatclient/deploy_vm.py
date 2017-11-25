@@ -5,8 +5,8 @@ Created on Nov 22, 2015
 '''
 import create_stack
 
-config_node_ip = '10.10.10.156'
-project_name = 'zeppo'
+config_node_ip = '10.10.13.103'
+project_name = 'chico'
 
 StackData = [{ 'stack_name': project_name + '-vnet-1',                
                'yaml_file':'../templates/deploy_vm.yaml',

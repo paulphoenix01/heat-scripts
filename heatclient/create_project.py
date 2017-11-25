@@ -5,8 +5,8 @@ Created on Nov 22, 2015
 '''
 import create_stack
 
-config_node_ip = '10.10.10.156'
-project_name = 'zeppo'
+config_node_ip = '10.10.13.103'
+project_name = 'chico'
 
 StackData = {   'stack_name': project_name,
                 'yaml_file':'../templates/create_project.yaml',
@@ -22,6 +22,6 @@ StackData = {   'stack_name': project_name,
                                     }
             }
 
-stack = create_stack.create_stack(config_node_ip, project_name, **StackData)
+stack = create_stack.create_stack(config_node_ip, 'admin', **StackData)
  
 print stack

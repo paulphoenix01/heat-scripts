@@ -1,27 +1,45 @@
 '''
-Created on Nov 21, 2015
-
+Version 2: 
+Created on Nov 24, 2017
 @author: azaringh
 '''
+
 import yaml
 import jinja2
-from heatclient.client import Client as Heat_Client
-from keystoneclient.v2_0 import Client as Keystone_Client
+from heatclient import client
+from keystoneauth1.identity import v2
+from keystoneauth1 import session
+from keystoneauth1 import loading
 
-def get_keystone_creds(config_node_ip, tenant_name):
-    d = {}
-    d['username'] = 'admin'
-    d['password'] = 'contrail123'
-    d['auth_url'] = 'http://' + config_node_ip + ':5000/v2.0'
-    d['tenant_name'] = tenant_name
-    return d
+CONFIG_IP = '192.168.250.1'
+username = 'admin'
+password = 'contrail123'
+auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
+#tenant_name = 'demo'
 
-def create_stack(config_node_ip, tenant_name, **kwargs):
-    cred = get_keystone_creds(config_node_ip, tenant_name)
-    ks_client = Keystone_Client(**cred)
-    heat_endpoint = ks_client.service_catalog.url_for(service_type='orchestration', endpoint_type='publicURL')
-    heatclient = Heat_Client('1', heat_endpoint, token=ks_client.auth_token)
-     
+
+def get_keystone_session(tenant_name='demo'):
+    username = 'admin'
+    password = 'contrail123'
+    auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
+    tenant_name = tenant_name
+    
+    auth = v2.Password(username=username, password=password, tenant_name=tenant_name, auth_url=auth_url)
+
+    sess = session.Session(auth=auth)
+
+    return sess
+
+def create_stack( tenant_name='demo', **kwargs):
+    
+    loader = loading.get_plugin_loader('password')
+    auth = loader.load_from_options(auth_url=auth_url, username=username,password=password,project_name=tenant_name)
+    sess = session.Session(auth=auth)
+
+    heatclient = client.Client('1', session=sess)
+
+    #heatclient.stacks.list()
+   
     f = open(kwargs['yaml_file'])
     txt = f.read()
     
@@ -35,4 +53,6 @@ def create_stack(config_node_ip, tenant_name, **kwargs):
     tx = { "files": {}, "disable_rollback": "true", "stack_name": kwargs['stack_name'], "template": txt, "parameters": data, "environment": {}}
     
     stack = heatclient.stacks.create(**tx)
+    
     return stack
+    

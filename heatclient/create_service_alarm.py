@@ -6,8 +6,8 @@ Created on Nov 23, 2015
 import create_stack
 import time, datetime
 
-config_node_ip = '10.10.10.156'
-project_name = 'zeppo'
+config_node_ip = '10.10.13.103'
+project_name = 'chico'
 
 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
