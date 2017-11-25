@@ -1,8 +1,9 @@
 '''
 Created on Nov 24, 2017
 
-@author: azaringh
+@author: azaringh + lphan
 '''
+
 import create_stack
 import sys
 

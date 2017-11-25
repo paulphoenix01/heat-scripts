@@ -1,30 +1,33 @@
 '''
-Created on Nov 21, 2015
-
-@author: azaringh
+Version 2: 
+Created on Nov 24, 2017
+@author: azaringh + lphan
 '''
+
 import yaml
 import jinja2
-from heatclient.client import Client as Heat_Client
-from keystoneclient.v2_0 import Client as Keystone_Client
+from heatclient import client
+from keystoneauth1.identity import v2
+from keystoneauth1 import session
+from keystoneauth1 import loading
 
-config_node_ip = '192.168.250.1'
+CONFIG_IP = '192.168.250.1'
+username = 'admin'
+password = 'contrail123'
+auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
 
-def get_keystone_creds(config_node_ip, tenant_name):
-    d = {}
-    d['username'] = 'admin'
-    d['password'] = 'contrail123'
-    d['auth_url'] = 'http://' + config_node_ip + ':5000/v2.0'
-    d['tenant_name'] = tenant_name
-    return d
 
-def create_stack(tenant_name, **kwargs):
-    cred = get_keystone_creds(config_node_ip, tenant_name)
-    ks_client = Keystone_Client(**cred)
-    heat_endpoint = ks_client.service_catalog.url_for(service_type='orchestration', endpoint_type='publicURL')
-    #heat_endpoint = "http://192.168.250.1:8000/v1"
-    heatclient = Heat_Client('1', heat_endpoint, token=ks_client.auth_token)
-     
+def create_stack( tenant_name='demo', **kwargs):
+    
+    #Authenticate
+    loader = loading.get_plugin_loader('password')
+    auth = loader.load_from_options(auth_url=auth_url, username=username,password=password,project_name=tenant_name)
+    sess = session.Session(auth=auth)
+    
+    #Heat Client
+    heatclient = client.Client('1', session=sess)
+
+    #Open Yaml file, with jinja template
     f = open(kwargs['yaml_file'])
     txt = f.read()
     
@@ -35,7 +38,11 @@ def create_stack(tenant_name, **kwargs):
     template_vars = kwargs['stack_template']
     data = yaml.load(template.render( template_vars ))
     
+    #Assemble all params
     tx = { "files": {}, "disable_rollback": "true", "stack_name": kwargs['stack_name'], "template": txt, "parameters": data, "environment": {}}
     
+    #Create Stack
     stack = heatclient.stacks.create(**tx)
+    
     return stack
+    

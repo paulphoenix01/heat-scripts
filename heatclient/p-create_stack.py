@@ -1,7 +1,7 @@
 '''
 Version 2: 
 Created on Nov 24, 2017
-@author: azaringh
+@author: azaringh + lphan
 '''
 
 import yaml
@@ -15,31 +15,19 @@ CONFIG_IP = '192.168.250.1'
 username = 'admin'
 password = 'contrail123'
 auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
-#tenant_name = 'demo'
 
-
-def get_keystone_session(tenant_name='demo'):
-    username = 'admin'
-    password = 'contrail123'
-    auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
-    tenant_name = tenant_name
-    
-    auth = v2.Password(username=username, password=password, tenant_name=tenant_name, auth_url=auth_url)
-
-    sess = session.Session(auth=auth)
-
-    return sess
 
 def create_stack( tenant_name='demo', **kwargs):
     
+    #Authenticate
     loader = loading.get_plugin_loader('password')
     auth = loader.load_from_options(auth_url=auth_url, username=username,password=password,project_name=tenant_name)
     sess = session.Session(auth=auth)
-
+    
+    #Heat Client
     heatclient = client.Client('1', session=sess)
 
-    print heatclient.stacks.list()
-   
+    #Open Yaml file, with jinja template
     f = open(kwargs['yaml_file'])
     txt = f.read()
     
@@ -50,8 +38,10 @@ def create_stack( tenant_name='demo', **kwargs):
     template_vars = kwargs['stack_template']
     data = yaml.load(template.render( template_vars ))
     
+    #Assemble all params
     tx = { "files": {}, "disable_rollback": "true", "stack_name": kwargs['stack_name'], "template": txt, "parameters": data, "environment": {}}
     
+    #Create Stack
     stack = heatclient.stacks.create(**tx)
     
     return stack
