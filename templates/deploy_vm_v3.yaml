@@ -1,0 +1,107 @@
+heat_template_version: 2015-04-30
+
+description: >
+  HOT template to create a new network, and for deploying
+  two servers into the new network. It also has security-groups
+  to control traffic flow
+
+parameters:
+  image:
+    type: string
+    description: Name of image to use for servers
+  flavor:
+    type: string
+    description: Flavor to use for servers
+  private_net_name:
+    type: string
+    description: Name of private network to be created
+  server_name:
+    type: string
+    description: Name of VM
+  port_name_1:
+    type: string
+    description: Name of port
+  private_network_prefix:
+    type: string
+    description: Private network prefix
+  private_network_prefix_len:
+    type: string
+    description: Private network prefix len
+  addr_from_start_true:
+    type: boolean
+    description: Address allocation from start
+  sg_name:
+    type: string
+    description: Security Group Name
+resources:
+  template_NetworkIpam:
+    type: OS::ContrailV2::NetworkIpam
+    properties:
+      name: { get_param: private_net_name }
+
+  template_VirtualNetwork:
+    type: OS::ContrailV2::VirtualNetwork
+    depends_on: [ template_NetworkIpam ]
+    properties:
+      name: { get_param: private_net_name }
+      network_ipam_refs: [{ get_resource: template_NetworkIpam }]
+      network_ipam_refs_data:
+        [{
+          network_ipam_refs_data_ipam_subnets:
+            [{
+              network_ipam_refs_data_ipam_subnets_subnet:
+                {
+                  network_ipam_refs_data_ipam_subnets_subnet_ip_prefix: { get_param: private_network_prefix },
+                  network_ipam_refs_data_ipam_subnets_subnet_ip_prefix_len: { get_param: private_network_prefix_len },
+                },
+              network_ipam_refs_data_ipam_subnets_addr_from_start: { get_param: addr_from_start_true },
+            }]
+         }]
+
+  template_InstanceIp_1:
+    type: OS::ContrailV2::InstanceIp
+    properties:
+      name: { get_param: port_name_1 }
+      virtual_machine_interface_refs: [{ get_resource: template_VirtualMachineInterface_1 }]
+      virtual_network_refs: [{ list_join: [':', { get_attr: [ template_VirtualNetwork, fq_name ] } ] }]
+
+  template_VirtualMachineInterface_1:
+    type: OS::ContrailV2::VirtualMachineInterface
+    properties:
+      name: { get_param: port_name_1 }
+      virtual_network_refs: [{ list_join: [':', { get_attr: [ template_VirtualNetwork, fq_name ] } ] }]
+      security_group_refs: [{ get_resource: security_group }]
+
+  server1:
+    type: OS::Nova::Server
+    depends_on: [ template_InstanceIp_1 ]
+    properties:
+      name: { get_param: server_name }
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      networks:
+        - port: { get_resource: template_VirtualMachineInterface_1 }
+  security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      description: Create a security group with rules
+      name: { get_param: sg_name }
+      rules: [
+        {
+          remote_ip_prefix: 0.0.0.0/0,
+          protocol: udp,
+          port_range_min: 1,
+          port_range_max: 65535
+        },
+        {
+          remote_ip_prefix: 0.0.0.0/0,
+          protocol: tcp,
+          port_range_min: 1,
+          port_range_max: 65535
+        },
+        {
+          remote_ip_prefix: 0.0.0.0/0,
+          protocol: icmp
+        },
+      ]
+

@@ -10,21 +10,20 @@ user_input = sys.argv
 
 config_node_ip = '192.168.250.1'
 project_name = 'demo'
-
 if len(user_input) != 3 or user_input[2] =='h':	
-	print "create_ipam <stack_name> <tenant_name>"
-	print "Example: python create_ipam.py demo_ipam_stack demo"
+	print "create_security_group <stack_name> <ipam_name>"
+	print "Example: python create_security_group.py demo_sg_stack demo_sg"
 	exit(1)
 
 stack_name = user_input[1]
-ipam_name = user_input[2]+'-ipam'
+sg_name = user_input[2]
 
 StackData = {   'stack_name': stack_name,
-                'yaml_file':'../templates/ipam.yaml',
+                'yaml_file':'../templates/security_group.yaml',
                 'jinja_path': '../jinja/',
-                'jinja_file': 'ipam.jinja',
+                'jinja_file': 'security_group.jinja',
                 'stack_template': { 
-                                     'ipam_name': ipam_name
+                                     'sg_name': sg_name
                                     }
             }
 
