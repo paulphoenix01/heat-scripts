@@ -9,19 +9,19 @@ from pprint import pprint
 
 user_input = sys.argv
 
-config_node_ip = '192.168.250.1'
 
-if len(user_input) != 5 or user_input[2] =='h':
-        print "create_vm <stack-name> <tenant-name> <vm-name> <subnet x.x.x.x/24>"
-        print "Example: python create_vm.py create-vm1-stack demo demo-vm1 192.168.1.0/24"
-	print "Example python create_vm.py create-vm2-stack demo demo-vm2 192.168.2.0/24"
+if len(user_input) != 4 or user_input[2] =='h':
+        print "create_vm <stack-name> <vm-name> <subnet x.x.x.x/24>"
+        print "Example: python create_vm.py create-vm1-stack demo-vm1 192.168.1.0/24"
+	print "Example: python create_vm.py create-vm2-stack demo-vm2 192.168.2.0/24"
         exit(1)
 
 #Parse User_input
 stack_name = user_input[1]
-project_name = user_input[2]
-vm_name = user_input[3]
-network = user_input[4].split('/')
+#project_name = user_input[2]
+project_name = 'demo'
+vm_name = user_input[2]
+network = user_input[3].split('/')
 
 #Network name/subnet
 private_net_name = vm_name + '-vnet'
@@ -51,5 +51,7 @@ StackData = { 'stack_name': stack_name,
                 }
 
 #pprint(StackData)
+print ">>> Creating VM stack:  %s" % (vm_name)
+
 stack = create_stack.create_stack(project_name, **StackData)
 print stack
