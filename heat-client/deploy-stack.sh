@@ -12,3 +12,4 @@ python attach_network_policy.py attach-policy-stack1 public-net vm1-vnet
 sleep 5
 python attach_network_policy.py attach-policy-stack2 public-net vm2-vnet
 sleep 5
+echo "Done"
