@@ -22,7 +22,7 @@ stack_name = user_input[1]
 project_name = user_input[2]
 
 net_name = user_input[3] 
-subnet_name = user_input[3] + 'subnet'
+subnet_name = net_name+ '-subnet'
 
 ip_prefix = user_input[4]
 default_gateway = ip_prefix.replace('.0/24', '.1')
