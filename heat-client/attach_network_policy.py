@@ -13,7 +13,7 @@ config_node_ip = '192.168.250.1'
 
 if len(user_input) != 4 or user_input[2] =='h':
         print "attach_net_policy <stack-name> <net_1_name> <net_2_name>"
-        print "Example: python attach_net_policy.py attach-policy-stack vm1-vnet vm2-vnet"
+        print "Example: python attach_net_policy.py attach-policy-stack demo-vm1-vnet demo-vm2-vnet"
         exit(1)
 
 #Parse User_input
