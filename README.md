@@ -13,7 +13,15 @@ chmod 700 deploy-stack.sh
 ```
 Output would be as follow
 ```
-output
+root@nugget-linux:~/heat-scripts/heat-client# ./deploy-stack.sh
+>>> Creating Stack for Network: public-net
+>>> Creating Stack for Spawning VM:  demo-vm1
+>>> Creating Stack for Spawning VM:  demo-vm2
+... Waiting 60s for VMs to boot ...
+>>> Creating Stack for Attaching Network Policy: demo-vm1-vnet<->demo-vm2-vnet
+>>> Creating Stack for Attaching Network Policy: public-net<->demo-vm1-vnet
+>>> Creating Stack for Attaching Network Policy: public-net<->demo-vm2-vnet
+Done
 ```
 
 ### Heat-client explanation
@@ -24,6 +32,7 @@ python create_public_net.py <stack-name> <net-name> <subnet 10.1.<dc_number>.x/2
 ```
 
 ***create_vm.py***
+
 Repeat for vm1 and vm2
 ```
 python create_vm <stack-name> <vm-name> <subnet x.x.x.x/24> 
@@ -39,3 +48,16 @@ Repeat for vm1-net <> vm2-net, vm1-net <> public-net, vm2-net <> public-net
 python attach_network_policy <stack-name> <net_1_name> <net_2_name>
 *** Example: python attach_network_policy.py attach-policy-stack vm1-vnet vm2-vnet ***
 ```
+
+
+### Result
+Contrail Network
+
+Public network shows: External = Enabled
+![network](https://imgur.com/Kx34wBh)
+
+Policies
+![policies](https://imgur.com/GF1EVOe)
+
+VMs connectivity
+![vms](https://imgur.com/GF1EVOe)
