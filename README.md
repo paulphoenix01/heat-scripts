@@ -3,7 +3,7 @@ Demo of using Heat scripts for automating VM and Network creation with Contrail 
 ### Running full Heat-stack scripts
 Clone the repo
 ```
-wget clone https://github.com/paulphoenix01/heat-scripts
+git clone https://github.com/paulphoenix01/heat-scripts
 ```
 Go to heat-client, give deploy-stack.sh execute permission, and execute
 ```
