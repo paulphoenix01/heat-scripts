@@ -8,7 +8,7 @@ sleep 60
 
 python attach_network_policy.py attach-policy-stack vm1-vnet vm2-vnet
 sleep 5
-python attach_network_policy.py attach-policy-stack public-net vm1-vnet
+python attach_network_policy.py attach-policy-stack1 public-net vm1-vnet
 sleep 5
-python attach_network_policy.py attach-policy-stack public-net vm2-vnet
+python attach_network_policy.py attach-policy-stack2 public-net vm2-vnet
 sleep 5
