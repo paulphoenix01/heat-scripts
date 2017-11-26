@@ -54,10 +54,10 @@ python attach_network_policy <stack-name> <net_1_name> <net_2_name>
 Contrail Network
 
 Public network shows: External = Enabled
-![network](https://imgur.com/Kx34wBh)
+![network](https://i.imgur.com/Kx34wBh.png)
 
 Policies
-![policies](https://imgur.com/GF1EVOe)
+![policies](https://i.imgur.com/GF1EVOe.png)
 
 VMs connectivity
-![vms](https://imgur.com/GF1EVOe)
+![vms](https://i.imgur.com/nTbd2QY.png)
