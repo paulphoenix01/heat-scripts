@@ -1,0 +1,45 @@
+heat_template_version: 2015-04-30
+
+description: >
+  HOT template to create and assign FloatingIp:
+
+parameters:
+  floating_ip_pool_subnet_prefix:
+    type: string
+    description: ip_prefix for the FloatingIpPool
+    # operations: CRUD
+    # required: optional
+  floating_ip_pool_subnet_prefix_len:
+    type: number
+    description: ip_prefix_len for the FloatingIpPool
+    # operations: CRUD
+    # required: optional
+  virtual_network:
+    type: string
+    description: virtual_network for the FloatingIpPool
+    # required: optional
+  port_id:
+    type: string
+    description: Virtual machine interface ID
+resources:
+  template_FloatingIpPool:
+    type: OS::ContrailV2::FloatingIpPool
+    properties:
+      name: Floating-Pool
+      floating_ip_pool_prefixes:
+        {
+          floating_ip_pool_prefixes_subnet:
+            [{
+              floating_ip_pool_prefixes_subnet_ip_prefix: { get_param: floating_ip_pool_subnet_prefix },
+              floating_ip_pool_prefixes_subnet_ip_prefix_len: { get_param: floating_ip_pool_subnet_prefix_len },
+            }],
+        }
+      virtual_network: { get_param: virtual_network }
+
+  template_FloatingIp:
+    type: OS::ContrailV2::FloatingIp
+    properties:
+      name: Floating-IP
+      virtual_machine_interface_refs: [{ get_param: port_id }]
+      floating_ip_pool: { get_resource: template_FloatingIpPool }
+
