@@ -47,4 +47,4 @@ StackData = { 'stack_name': stack_name,
 print ">>> Creating Stack for Network: %s" % (net_name)
 
 stack = create_stack.create_stack(project_name, **StackData)
-print stack
+#print stack

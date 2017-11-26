@@ -51,7 +51,7 @@ StackData = { 'stack_name': stack_name,
                 }
 
 #pprint(StackData)
-print ">>> Creating VM stack:  %s" % (vm_name)
+print ">>> Creating Stack for Spawning VM:  %s" % (vm_name)
 
 stack = create_stack.create_stack(project_name, **StackData)
-print stack
+#print stack
