@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [[ $# -ne 1 ]]; then
-        echo "Usage: slist  tenant-name"
-        exit 1
-fi
-
-heat --os-tenant-name $1 stack-list

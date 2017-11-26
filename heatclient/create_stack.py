@@ -6,7 +6,6 @@ Created on Nov 24, 2017
 
 import yaml
 import jinja2
-from pprint import pprint
 from heatclient import client
 from keystoneauth1.identity import v2
 from keystoneauth1 import session
@@ -41,9 +40,9 @@ def create_stack( tenant_name='demo', **kwargs):
     
     #Assemble all params
     tx = { "files": {}, "disable_rollback": "true", "stack_name": kwargs['stack_name'], "template": txt, "parameters": data, "environment": {}}
-     
+    
     #Create Stack
-    stack =  heatclient.stacks.create(**tx)
+    stack = heatclient.stacks.create(**tx)
     
     return stack
     
