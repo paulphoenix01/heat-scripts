@@ -31,7 +31,9 @@ create_vm <stack-name> <vm-name> <subnet x.x.x.x/24>
 ```
 
 ***attach_network_policy.py***
+
 Policy will allow all TCP/UDP/ICMP between 2 networks
+
 Repeat for vm1-net <> vm2-net, vm1-net <> public-net, vm2-net <> public-net
 ```
 attach_net_policy <stack-name> <net_1_name> <net_2_name>
