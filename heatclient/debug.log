@@ -1,0 +1,10 @@
+{'jinja_file': 'public_net.jinja',
+ 'jinja_path': '../jinja/',
+ 'stack_name': 'my_stack',
+ 'stack_template': {'external': 'True',
+                    'private_net_1_name': 'public-vnet',
+                    'private_net_1_prefix': '10.1.103.0',
+                    'private_net_1_prefix_len': '24',
+                    'route_targets': 'target:65250:10250',
+                    'shared': 'True'},
+ 'yaml_file': '../templates/public_net.yaml'}

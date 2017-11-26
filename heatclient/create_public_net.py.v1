@@ -1,0 +1,55 @@
+'''
+Created on Nov 24, 2017
+
+@author: azaringh
+'''
+import create_stack
+import sys
+from pprint import pprint
+
+user_input = sys.argv
+
+config_node_ip = '192.168.250.1'
+
+if len(user_input) != 5 or user_input[2] =='h':
+        print "create_public_net <stack-name> <tenant-name> <public-net-name> <subnet 10.1.<dc_number>.0/24>"
+        print "Example: python create_public_net.py public-net-stack demo public 10.1.102.0/24"
+        exit(1)
+
+#Parse User_input
+stack_name = user_input[1]
+project_name = user_input[2]
+#ipam = default-domain:demo:demo-ipam
+ipam = 'default-domain:%s:%s-ipam' %(project_name, user_input[3])
+
+net_name = user_input[3] + '-vnet'
+subnet_name = user_input[3] +'-vsubnet'
+
+ip_prefix = user_input[4]
+default_gateway = str(ip_prefix.replace('.0/24','.1'))
+
+
+#Default route-target
+route_targets = "target:65250:10250"
+shared = 'True'
+external = 'True'
+
+StackData = { 'stack_name': stack_name,                
+               'yaml_file':'../templates/public_net.yaml',
+                'jinja_path': '../jinja/',
+                'jinja_file': 'public_net.jinja',
+                 'stack_template': {
+                                         'net_name' : net_name,
+                                         'subnet_name': subnet_name,
+					 'ipam': ipam,
+					 'route_targets' : route_targets,
+					 'ip_prefix': ip_prefix,
+					 'shared': shared,
+					 'external': external,
+                                         'default_gateway' : default_gateway
+                                         }
+                }
+
+pprint(StackData)
+stack = create_stack.create_stack(project_name, **StackData)
+print stack

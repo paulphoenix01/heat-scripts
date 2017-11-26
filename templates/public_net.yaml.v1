@@ -1,0 +1,52 @@
+heat_template_version: 2013-05-23
+
+description: >
+  HOT template to creates a public virtual network
+
+parameters:
+  net_name:
+    type: string
+    description: Name of virtual network to be created
+  shared:
+    type: string
+    description: Is virtual network shared
+  external:
+    type: string
+    description: Is virtual network external
+  route_targets:
+    type: string
+    description: route targets associated with the virtual network
+#  forwarding_mode:
+#    type: string
+#    description: forwarding mode of the virtual network
+#    default: l2_l3
+  subnet_name:
+    type: string
+    description: Name of subnet to be created
+  ip_prefix:
+    type: string
+    description: The CIDR
+  default_gateway:
+    type: string
+    description: The default gateway 
+  ipam:
+    type: string
+    description: The assoiated IPAM id or fq_name_string
+resources:
+  virtual_network:
+    type: OS::Contrail::VirtualNetwork
+    properties:
+      name: { get_param: net_name }
+      shared: { get_param: shared }
+      external: { get_param: external }
+      route_targets: { "Fn::Split" : [ ",", Ref: route_targets ] }
+#      forwarding_mode: { get_param: forwarding_mode }
+  virtual_subnet:
+    type: OS::Contrail::VnSubnet
+    depends_on: virtual_network
+    properties:
+      name: { get_param: subnet_name }
+      network: { get_resource: virtual_network }
+      ip_prefix: { get_param: ip_prefix }
+      default_gateway: { get_param: default_gateway }
+      ipam: { get_param: ipam }

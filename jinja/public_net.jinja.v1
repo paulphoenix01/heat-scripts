@@ -1,0 +1,8 @@
+net_name = {{net_name}}
+subnet_name = {{subnet_name}}
+ip_prefix = {{ip_prefix}}
+default_gateway = {{default_gateway}}
+ipam = {{ipam}}
+shared = {{shared}}
+external = {{external}}
+route_targets = {{route_targets}}
