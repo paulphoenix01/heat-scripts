@@ -10,8 +10,8 @@ user_input = sys.argv
 
 
 if len(user_input) != 6 or user_input[2] =='h':
-        print "create_service_template <stack-name> <template-name> <instance_name> <vnet-1-name> <vnet-2-name>"
-	print "Example: python create_service_template.py fw-instance-stack firewall firewall demo-vm1-vnet demo-vm2-vnet"
+        print "create_service_instance <stack-name> <template-name> <instance_name> <vnet-1-name> <vnet-2-name>"
+	print "Example: python create_service_instance.py fw-instance-stack firewall firewall demo-vm1-vnet demo-vm2-vnet"
 	exit(1)
 
 project_name = 'appformix'

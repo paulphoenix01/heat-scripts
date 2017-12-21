@@ -10,10 +10,10 @@ sleep 5
 echo ">> Creating Service template.."
 python create_service_template.py fw-template-stack firewall
 
-echo "\t\t .. Service Instance .. Net1 <> Firewall <> Net2"
-python create_service_template.py fw-instance-stack firewall firewall demo-vm1-vnet demo-vm2-vnet
+echo "         .. Service Instance .. Net1 <> Firewall <> Net2"
+python create_service_instance.py fw-instance-stack firewall firewall demo-vm1-vnet demo-vm2-vnet
 
-echo "\t\t .. Service Policy"
+echo "         .. Service Policy"
 python create_service_policy.py fw-policy-stack firewall-service-instance demo-vm1-vnet demo-vm2-vnet
 
 echo "Done"
