@@ -30,8 +30,7 @@ private_network_prefix_len = network[1]
 
 port_name_1 = vm_name + '-port'
 addr_from_start_true = "True"
-sg_name = project_name + '-default-sg'
-ipam_name = project_name + '-ipam'
+sg_name = vm_name + '-sg'
 
 StackData = { 'stack_name': stack_name,                
                'yaml_file':'../templates/deploy_vm_v3.yaml',
@@ -45,7 +44,6 @@ StackData = { 'stack_name': stack_name,
 					 'port_name_1': port_name_1,
 					 'sg_name' : sg_name,
 					 'server_name': vm_name,
-					 'ipam_name': ipam_name,
                                          'image': 'ubuntu-stress-test',
                                          'flavor': 'm1.medium'
                                          }
