@@ -36,6 +36,6 @@ StackData = { 'stack_name': stack_name,
                                     }
                }
 
-#stack = create_stack.create_stack(project_name, **StackData)
+stack = create_stack.create_stack(project_name, **StackData)
  
-print stack
+#print stack
