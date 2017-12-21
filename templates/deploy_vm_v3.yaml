@@ -33,14 +33,11 @@ parameters:
   sg_name:
     type: string
     description: Security Group Name
-  ipam_name:
-    type: string
-    description: IPAM Name
 resources:
   template_NetworkIpam:
     type: OS::ContrailV2::NetworkIpam
     properties:
-      name: { get_param: ipam_name }
+      name: { get_param: private_net_name }
 
   template_VirtualNetwork:
     type: OS::ContrailV2::VirtualNetwork
