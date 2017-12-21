@@ -17,7 +17,7 @@ password = 'contrail123'
 auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
 
 
-def create_stack( tenant_name='demo', **kwargs):
+def create_stack( tenant_name='appformix', **kwargs):
     
     #Authenticate
     loader = loading.get_plugin_loader('password')

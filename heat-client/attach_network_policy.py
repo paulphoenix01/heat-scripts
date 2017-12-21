@@ -18,7 +18,7 @@ if len(user_input) != 4 or user_input[2] =='h':
 
 #Parse User_input
 stack_name = user_input[1]
-project_name = 'demo'
+project_name = 'appformix'
 
 net_1_name = "default-domain:%s:%s" %(project_name, user_input[2])
 net_2_name = "default-domain:%s:%s" %(project_name, user_input[3])
