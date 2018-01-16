@@ -1,0 +1,90 @@
+heat_template_version: 2013-05-23
+
+description: >
+  HOT template to creates a virtual network, subnet and VM
+
+parameters:
+  net_name:
+    type: string
+    description: Name of virtual network to be created
+  shared:
+    type: string
+    description: Is virtual network shared
+    default: False
+  external:
+    type: string
+    description: Is virtual network external
+    default: False
+  subnet_name:
+    type: string
+    description: Name of subnet to be created
+  ip_prefix:
+    type: string
+    description: The CIDR
+  default_gateway:
+    type: string
+    description: The default gateway 
+  ipam:
+    type: string
+    description: The assoiated IPAM id or fq_name_string
+  dhcp:
+    type: string
+    description: Enable DHCP (True or False)
+    default: True
+#  net_pool_start:
+#    type: string
+#    description: Start of network IP address allocation pool
+#  net_pool_end:
+#    type: string
+#    description: End of network IP address allocation pool
+  dns_nameservers:
+    description: DNS Nameservers list
+    type: comma_delimited_list
+    default: 8.8.8.8
+  server_name:
+    type: string
+    description: Name of the server
+  image:
+    type: string
+    description: Name of image to use for servers
+  flavor:
+    type: string
+    description: Flavor to use for servers
+
+resources:
+  virtual_network:
+    type: OS::Contrail::VirtualNetwork
+    properties:
+      name: { get_param: net_name }
+      shared: { get_param: shared }
+      external: { get_param: external }
+
+  virtual_subnet:
+    type: OS::Contrail::VnSubnet
+    depends_on: virtual_network
+    properties:
+      name: { get_param: subnet_name }
+      #network: { get_param: net_name }
+      network: { get_resource: virtual_network }
+      ip_prefix: { get_param: ip_prefix }
+      default_gateway: { get_param: default_gateway }
+      ipam: { get_param: ipam }
+#      allocation_pools:
+#        - start: { get_param: net_pool_start }
+#          end: { get_param: net_pool_end }
+
+  server_port:
+    type: OS::Neutron::Port
+    depends_on: virtual_subnet
+    properties:
+      network: { get_resource: virtual_network }
+
+  server:
+    type: OS::Nova::Server
+    depends_on: server_port
+    properties:
+      name: { get_param: server_name }
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      networks:
+        - port: { get_resource: server_port }
