@@ -19,8 +19,9 @@ stack_name = user_input[1]
 instance_name = user_input[2]
 policy_name = instance_name + '-policy'
 
-net_1_name = user_input[3]
-net_2_name = user_input[4]
+service_instance_name = 'default-domain:' + project_name + ':' + instance_name
+net_1_name = 'default-domain:' + project_name + ':' + user_input[3]
+net_2_name = 'default-domain:' + project_name + ':' + user_input[4]
 
 StackData = {   'stack_name': stack_name,
                 'yaml_file':'../templates/service_policy.yaml',
@@ -28,7 +29,7 @@ StackData = {   'stack_name': stack_name,
                 'jinja_file': 'service_policy.jinja',
                 'stack_template': { 
                                     'policy_name': policy_name,
-                                    'service_instance_name': 'default-domain:' + project_name + ':' + instance_name,
+                                    'service_instance_name': service_instance_name,
                                     'net_1_name': net_1_name,
                                     'net_2_name': net_2_name
                                     }

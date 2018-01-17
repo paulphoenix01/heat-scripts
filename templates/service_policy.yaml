@@ -49,7 +49,6 @@ parameters:
 
 
 resources:
-
   service_policy:
     type: OS::Contrail::NetworkPolicy
     properties:
@@ -68,14 +67,12 @@ resources:
         ]
   policy_attach_net1:
     type: OS::Contrail::AttachPolicy
-    depends_on: service_policy
     properties:
       network: { get_param: net_1_name }
       policy: { get_attr: [service_policy, fq_name] }
 
   policy_attach_net2:
     type: OS::Contrail::AttachPolicy
-    depends_on: service_policy
     properties:
       network: { get_param: net_2_name }
       policy: { get_attr: [service_policy, fq_name] }
