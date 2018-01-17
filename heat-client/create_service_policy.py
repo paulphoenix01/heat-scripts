@@ -17,7 +17,7 @@ project_name = 'appformix'
 stack_name = user_input[1]
 
 instance_name = user_input[2]
-policy_name = instance_name + '-policy'
+policy_name = instance_name + '-policy1'
 
 service_instance_name = 'default-domain:' + project_name + ':' + instance_name
 net_1_name = 'default-domain:' + project_name + ':' + user_input[3]
@@ -34,6 +34,8 @@ StackData = {   'stack_name': stack_name,
                                     'net_2_name': net_2_name
                                     }
             }
+
+print StackData
 stack = create_stack.create_stack(project_name, **StackData)
  
 #print stack
