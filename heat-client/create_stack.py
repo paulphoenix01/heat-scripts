@@ -16,9 +16,7 @@ username = 'admin'
 password = 'contrail123'
 auth_url = 'http://' + CONFIG_IP + ':5000/v2.0'
 
-
-def create_stack( tenant_name='appformix', **kwargs):
-    
+def init_stack_session(tenant_name='appformix', **kwargs):
     #Authenticate
     loader = loading.get_plugin_loader('password')
     auth = loader.load_from_options(auth_url=auth_url, username=username,password=password,project_name=tenant_name)
@@ -40,9 +38,24 @@ def create_stack( tenant_name='appformix', **kwargs):
     
     #Assemble all params
     tx = { "files": {}, "disable_rollback": "true", "stack_name": kwargs['stack_name'], "template": txt, "parameters": data, "environment": {}}
-    
+
+    return tx, heatclient
+
+
+
+def create_stack( tenant_name='appformix', **kwargs):
+    tx, heatclient = init_stack_session(**kwargs)
     #Create Stack
     stack = heatclient.stacks.create(**tx)
     
     return stack
-    
+
+
+def update_stack( tenant_name='appformix', **kwargs):
+    tx, heatclient = init_stack_session(**kwargs)
+    #Update Stack
+    stack = heatclient.stacks.update(kwargs['stack_name'], **tx)
+
+    return stack
+
+     
