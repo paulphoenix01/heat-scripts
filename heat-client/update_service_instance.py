@@ -4,7 +4,7 @@ Created on Nov 22, 2015
 @author: azaringh
 '''
 import create_stack
-import sys
+import sys, os
 
 user_input = sys.argv
 
@@ -25,9 +25,10 @@ net_2_name = user_input[5]
 
 max_instance = int(user_input[6])
 
+base_path = os.getcwd()
 StackData = { 'stack_name': stack_name,
-                'yaml_file':'../templates/service_instance.yaml',
-                'jinja_path': '../jinja/',
+                'yaml_file': base_path + '/templates/service_instance.yaml',
+                'jinja_path': base_path + '/jinja/',
                 'jinja_file': 'service_instance.jinja',
                 'stack_template': { 
                                    'instance_name': instance_name,
