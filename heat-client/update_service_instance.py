@@ -25,6 +25,7 @@ net_2_name = user_input[5]
 
 max_instance = int(user_input[6])
 
+os.chdir('/root/heat-scripts')
 base_path = os.getcwd()
 StackData = { 'stack_name': stack_name,
                 'yaml_file': base_path + '/templates/service_instance.yaml',
@@ -41,4 +42,4 @@ StackData = { 'stack_name': stack_name,
 
 stack = create_stack.update_stack(project_name, **StackData)
  
-#print stack
+#print StackData

@@ -39,7 +39,7 @@ class S(BaseHTTPRequestHandler):
 	content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
 	data = json.loads(post_data)
-	pprint(data['status']['description'])
+	pprint(data)
         self.wfile.write("<html><body><h1>POST!</h1></body></html>")
         
 def run(server_class=HTTPServer, handler_class=S, port=80):
