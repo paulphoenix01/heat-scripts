@@ -1,3 +1,3 @@
-3
+2
 firewall-service-instance002
-python /root/heat-scripts/heat-client/update_service_instance.py fw-instance-stack firewall firewall appformix-vnet-1 appformix-vnet-2 3
+python /root/heat-scripts/heat-client/update_service_instance.py fw-instance-stack firewall firewall appformix-vnet-1 appformix-vnet-2 2
