@@ -1,4 +1,3 @@
-{% set body_json = data['body']|load_json %}
 testing_event:
   local.cmd.run:
     - tgt: '*'
