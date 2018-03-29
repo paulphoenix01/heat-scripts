@@ -4,7 +4,7 @@ python create_vm.py create-vm2-stack demo-vm2 192.168.2.0/24
 echo "... Waiting 60s for VMs to boot ..."
 sleep 60
 
-python attach_network_policy.py attach-policy-stack demo-vm1-vnet demo-vm2-vnet
+python attach_network_policy.py attach-policy-stack1 demo-vm1-vnet demo-vm2-vnet
 sleep 5
 
 #echo ">> Creating Service template.."
