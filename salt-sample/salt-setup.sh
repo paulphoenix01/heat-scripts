@@ -9,6 +9,7 @@ git checkout auto-scaling
 sudo add-apt-repository ppa:saltstack/salt
 sudo apt-get update
 pip install cherrypy==8.1.2
+pip install filelock
 sudo apt-get install -y salt-master salt-api salt-minion salt-ssh salt-cloud salt-doc
 mkdir -p /srv/salt/reactor
 mkdir -p /srv/salt/pillar

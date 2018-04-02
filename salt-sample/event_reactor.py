@@ -1,15 +1,22 @@
 import os, sys, json
 import os.path as path
+from datetime import datetime
 from filelock import Timeout, FileLock
 
 #Change working directory
 os.chdir('/root/heat-scripts')
 base_path = os.getcwd()
 update_py_path = base_path + '/heat-client/update_service_instance.py'
-max_instance_path = base_path + '/salt-sample/max_instance.log'
+max_instance_path = '/var/log/salt/event/max_instance.log'
+cmd_log = '/var/log/salt/event/cmd.log'
 
 user_input = sys.argv
 reporting_instance = user_input[1]
+
+if 'firewall' not in reporting_instance:
+	print "Not Firewall Instance. Skipping.."
+	exit(1)
+
 log_file =  "CPU-" + reporting_instance + ".log"
 log_path = "/var/log/salt/event/" + log_file
 
@@ -41,19 +48,22 @@ def run_update_script(max_instance, alerted_name):
 	with open(max_instance_path, "w") as f:
 		for item in list:
 			f.write(str(item) +'\n')
-	os.system(cmd)
+	with open(cmd_log,'a') as f:
+		f.write(str(datetime.now()) +" : " + cmd+'\n')
 
+	os.system(cmd)
+	print cmd
 
 #Check last entry
 if lines[-1] is not None:
 	line = lines[-1].split(",")
 
 instance_name = reporting_instance
-cpu_metric = line[1]
+cpu_metric = float(line[1])
 
 #Check max_instance
-max_instance = max_instance_log[0]
-last_alerted_instance = max_instance_log[1]
+max_instance = max_instance_log[0].rstrip("\n")
+last_alerted_instance = max_instance_log[1].rstrip("\n")
 
 
 if "firewall" in instance_name: 
@@ -64,32 +74,7 @@ if "firewall" in instance_name:
 		#Scale in 3->2
 		run_update_script(2, instance_name)
 	else:
-		print instance_name + "\tCPU: " + str(cpu_metric).rstrip("\n") + " and Max_instance: " + str(max_instance).rstrip("\n") + ", no further action needed"
+		print instance_name + "\tCPU: " + str(cpu_metric).rstrip("\n") + " and Max_instance: " + str(max_instance) + ", no further action needed"
 
 lock.release()
 
-#############
-'''
-#Check last scale-out instance
-alerted_instance = instances[1].rstrip()
-max_instance = int(instances[0])
-
-for latest_event in latest_events:
-	instance_name = latest_event[1]		#event instance name
-	metric_value = float(latest_event[-1])	#CPU % usage
-
-	#Only check firewall services
-	if 'firewall' in instance_name:
-		#print "Alerted: " + alerted_instance + " and instance_name: " + instance_name
-		#If CPU > 60% and current max_instance=2
-		if metric_value >= 60 and max_instance == 2:
-			#Scale out 2->3
-			run_update_script(3, instance_name)
-		
-		#If CPU < 40% and current max_instance=3
-		elif metric_value < 40 and max_instance == 3 and alerted_instance == instance_name:
-			#Scale in 3->2
-			run_update_script(2, instance_name)
-		else:	#Do nothing
-			print "CPU: " + str(metric_value) + " and Max_instance: " + str(max_instance) + ", no further action needed"
-'''
