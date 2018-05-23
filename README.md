@@ -6,7 +6,7 @@ Demo of Auto Scaling with Appformix - Contrail - Heatstack
     + Service instance scaling is done by updating existing heatclient, which was used to create the firewall service.
 
 ## Step-by-step 
-### webhook Setup
+### Webhook Setup
 Clone this repo and switch to branch autoscaling-webhook
 ```
 git clone https://github.com/paulphoenix01/heat-scripts
@@ -34,7 +34,7 @@ python webhook.py 9999
 ```
 
 ### AppFormix Setup
-Change the AppFormix update interval to 10sec
+(Optional) Change the AppFormix update interval to 10sec
 ```
 curl -X PUT http://192.168.250.3:42595/appformix/v1.0/usage_post_interval?post_interval=10
 ```
